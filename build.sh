@@ -1,5 +1,6 @@
 echo "Building..."
-uglifyjs lib/strings/text.js lib/phaserjs/phaser.min.js lib/jquery/jquery-3.2.1.min.js game/scenes/preload.js game/scenes/play.js game/index.js -c -m -o game.js
+rm game.js
+uglifyjs lib/phaserjs/phaser.min.js lib/strings/text.js game/scenes/preload.js game/scenes/play.js game/index.js -c -m -o game.js
 echo ""
 echo "Done!"
 echo ""
