@@ -10,11 +10,11 @@ class preload extends Phaser.Scene {
     preload() {
 
         // loading assets
-        this.load.image("wheel", "../media/images/wheel.png");
-        this.load.image("pin", "../media/images/pin.png");
+        this.load.image("wheel", "media/images/wheel.png");
+        this.load.image("pin", "media/images/pin.png");
 
         // loading audio
-        this.load.audio('wof', "../media/audio/wof.ogg");
+        this.load.audio('wof', "media/audio/wof.ogg");
 
         this.load.once('complete', () => {
             this.scene.start('play');
