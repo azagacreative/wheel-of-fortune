@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "javascript-obfuscator": "^3.2.2",
     "uglifyjs": "^2.4.11"
   },
   "name": "wheel-of-fortune",
