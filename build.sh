@@ -40,7 +40,7 @@ sleep 1
 echo ""
 echo -e "Testing ${YELLOW}game.js${NOCOLOR}"
 node game.js > game.js.bak 2>&1
-sleep 5\\
+sleep 3
 echo "Done!"
 echo ""
 echo "Packing for github pages..."

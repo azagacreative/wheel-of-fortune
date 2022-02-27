@@ -61,7 +61,13 @@ class play extends Phaser.Scene{
             console.log('Spin play...');
 
             // resetting text field
-            //this.prizeText.setText("");
+            const _waiText = this.prizeText.setText("...").setAlpha(0);
+            const _tweenText = this.tweens.add({
+                targets: _waiText,
+                alpha: { value: 1, duration: 500, ease: 'Power1' },
+                yoyo: true,
+                loop: -1
+            });
 
             // the wheel will spin round from 2 to 4 times. This is just coreography
             var rounds = Phaser.Math.Between(4, 4);
@@ -93,7 +99,8 @@ class play extends Phaser.Scene{
                 onComplete: function(tween){
                     // player can spin again
                     this.canSpin = true;
-                    this.prizeText.setText(_STRINGS.GamePlay.slicePrizes[prize]);
+                    _tweenText.stop();
+                    this.prizeText.setText(_STRINGS.GamePlay.slicePrizes[prize])
                     console.log("Spin complete...");
                     this.sound.add('wof').stop();
                     console.log('Spin stop...');
