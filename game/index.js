@@ -18,7 +18,10 @@ const config = {
         preload,
         play,
 
-    ]
+    ],
+    dom: {
+        createContainer: true
+    },
 };
 
 // game constructor

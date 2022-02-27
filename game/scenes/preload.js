@@ -17,7 +17,10 @@ class preload extends Phaser.Scene {
         this.load.audio('wof', "media/audio/wof.ogg");
 
         this.load.once('complete', () => {
-            this.scene.start('play');
+            this.scene.start(
+                'play', 
+                this.sound.add('wof').stop()
+                );
         });
     }
 }
