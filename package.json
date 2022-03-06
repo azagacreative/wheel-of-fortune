@@ -1,5 +1,7 @@
 {
   "devDependencies": {
+    "@swc/cli": "^0.1.55",
+    "@swc/core": "^1.2.147",
     "javascript-obfuscator": "^3.2.2",
     "uglifyjs": "^2.4.11"
   },

@@ -7,21 +7,34 @@ var gameOptions = {
     // wheel rotation duration, in milliseconds
     rotationTime: 7500
 }
-
+let html;
+let skipToSpin;
 // PlayGame scene
-class play extends Phaser.Scene{
-    
+class play extends Phaser.Scene {
 
     // constructor
-    constructor(){
+    constructor() {
         super("play");
+
     }
 
     // method to be executed once the scene has been created
-    create(){
+    create() {
         const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
         const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
+        this.add.text(screenCenterX + 350, screenCenterY / 7, 'Hi, '+ localStorage.getItem('ACTGames_nickname'), _STRINGS.StyleText.watermark);
+        const logout = this.add.text(screenCenterX + 350, screenCenterY / 6.5, '\nLOGOUT', _STRINGS.StyleText.watermark);
+        logout.setInteractive({
+            useHandCursor: true
+        });
+        logout.on("pointerdown", () => {
+            localStorage.removeItem('ACTGames_nickname');
+            localStorage.removeItem('ACTGames_pin_code');
+            localStorage.removeItem('ACTGames_uid');
+            location.reload();
+        });
+        
         // adding the wheel in the middle of the canvas
         this.wheel = this.add.sprite(screenCenterX, screenCenterY - 50, "wheel").setScale(0.75);
 
@@ -38,24 +51,24 @@ class play extends Phaser.Scene{
         // the game has just started = we can spin the wheel
         this.canSpin = true;
 
+        
         // waiting for your input, then calling "spinWheel" function
         this.pin.setInteractive({
             useHandCursor: true
         });
-        this.pin.on("pointerdown", this.spinWheel, this);
+        this.pin.on("pointerdown", () => {
+            this.spinWheel();
+        });
 
         // adding the watermark
-        this.add.text(screenCenterX , screenCenterY * 1.90, _STRINGS.Branding.watermark, _STRINGS.StyleText.watermark).setOrigin(0.5, 0);
+        this.add.text(screenCenterX, screenCenterY * 1.90, _STRINGS.Branding.watermark, _STRINGS.StyleText.watermark).setOrigin(0.5, 0);
         console.log('Game initialized...');
 
     }
-
     // function to spin the wheel
-    spinWheel(){
-        
-
+    spinWheel() {
         // can we spin the wheel?
-        if(this.canSpin){
+        if (this.canSpin) {
 
             this.sound.add('wof').play();
             console.log('Spin play...');
@@ -84,27 +97,94 @@ class play extends Phaser.Scene{
             // animation tweeen for the spin: duration 3s, will rotate by (360 * rounds + degrees) degrees
             // the quadratic easing will simulate friction
             this.tweens.add({
-
-                // adding the wheel to tween targets
                 targets: [this.wheel],
-                // angle destination
                 angle: 360 * rounds + degrees,
-                // tween duration
                 duration: gameOptions.rotationTime,
-                // tween easing
                 ease: "Cubic.easeOut",
-                // callback scope
                 callbackScope: this,
+
                 // function to be executed once the tween has been completed
-                onComplete: function(tween){
+                onComplete: function (tween) {
+                    if (localStorage.getItem('ACTGames_uid') != null) {
                     // player can spin again
-                    this.canSpin = true;
-                    _tweenText.stop();
-                    this.prizeText.setText(_STRINGS.GamePlay.slicePrizes[prize])
-                    console.log("Spin complete...");
-                    this.sound.add('wof').stop();
-                    console.log('Spin stop...');
-                    console.log('Spin prize: ' + _STRINGS.GamePlay.slicePrizes[prize]);
+                        if (_STRINGS.GamePlay.slicePrizes[prize] === 'ZONK') {
+                            this.canSpin = false;
+                            _tweenText.stop();
+                            this.prizeText.setText(_STRINGS.GamePlay.slicePrizes[prize] + " STARS");
+                            console.log("Spin complete...");
+                            this.sound.add('wof').stop();
+                            console.log('Spin stop...');
+                            console.log('Spin prize: ' + _STRINGS.GamePlay.slicePrizes[prize]);
+                            localStorage.setItem("ACTGames_rewards", _STRINGS.GamePlay.slicePrizes[prize]);
+                            const scoreEncrypt = CryptoJS.AES.encrypt('0', 'secret key 123').toString();
+                            $.ajax({
+                                type: "POST",
+                                url: _API_URL + "/api/score",
+                                // The key needs to match your method's input parameter (case-sensitive).
+                                data: JSON.stringify({ uid: localStorage.getItem('ACTGames_uid'), score: scoreEncrypt }),
+                                headers: { "Content-Type": "application/json" },
+                                dataType: "json",
+                                success: function (data) { console.log(`%cAzagaCreativeAPIService:`,'color:#00FF00;', data); },
+                                error: function (errMsg) {
+                                    console.log(errMsg);
+                                }
+                            });
+
+                        } else if (_STRINGS.GamePlay.slicePrizes[prize] === 'TURN') {
+                            this.canSpin = true;
+                            _tweenText.stop();
+                            this.prizeText.setText(_STRINGS.GamePlay.slicePrizes[prize] + " STARS");
+                            console.log("Spin complete...");
+                            this.sound.add('wof').stop();
+                            console.log('Spin stop...');
+                            console.log('Spin prize: ' + _STRINGS.GamePlay.slicePrizes[prize]);
+                            localStorage.setItem("ACTGames_rewards", _STRINGS.GamePlay.slicePrizes[prize]);
+                            const scoreEncrypt = CryptoJS.AES.encrypt('0', 'secret key 123').toString();
+                            $.ajax({
+                                type: "POST",
+                                url: _API_URL + "/api/score",
+                                // The key needs to match your method's input parameter (case-sensitive).
+                                data: JSON.stringify({ uid: localStorage.getItem('ACTGames_uid'), score: scoreEncrypt }),
+                                headers: { "Content-Type": "application/json" },
+                                dataType: "json",
+                                success: function (data) { console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data); },
+                                error: function (errMsg) {
+                                    console.log(errMsg);
+                                }
+                            });
+                        }
+                        else {
+                            this.canSpin = false;
+                            _tweenText.stop();
+                            this.prizeText.setText(_STRINGS.GamePlay.slicePrizes[prize] + " STARS");
+                            console.log("Spin complete...");
+                            this.sound.add('wof').stop();
+                            console.log('Spin stop...');
+                            console.log('Spin prize: ' + _STRINGS.GamePlay.slicePrizes[prize]);
+                            localStorage.setItem("ACTGames_rewards", _STRINGS.GamePlay.slicePrizes[prize]);
+                            const scoreEncrypt = CryptoJS.AES.encrypt(JSON.stringify(_STRINGS.GamePlay.slicePrizes[prize]), 'secret key 123').toString();
+                            $.ajax({
+                                type: "POST",
+                                url: _API_URL + "/api/score",
+                                // The key needs to match your method's input parameter (case-sensitive).
+                                data: JSON.stringify({ uid: localStorage.getItem('ACTGames_uid'), score: scoreEncrypt }),
+                                headers: { "Content-Type": "application/json" },
+                                dataType: "json",
+                                success: function (data) { console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data); },
+                                error: function (errMsg) {
+                                    console.log(errMsg);
+                                }
+                            });
+                        }
+                    } else {
+                        this.canSpin = true;
+                        _tweenText.stop();
+                        this.prizeText.setText(_STRINGS.GamePlay.slicePrizes[prize] + " STARS");
+                        console.log("Spin complete...");
+                        this.sound.add('wof').stop();
+                        console.log('Spin stop...');
+                        console.log('Spin prize: ' + _STRINGS.GamePlay.slicePrizes[prize]);
+                    }
                 }
             });
         }
