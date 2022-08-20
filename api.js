@@ -1,4 +1,4 @@
-let _GAME_DEVELOPEMENT_MODE = true;
+let _GAME_DEVELOPEMENT_MODE = false;
 let _API_URL;
 
 if (_GAME_DEVELOPEMENT_MODE === true) {
