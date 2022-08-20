@@ -118,8 +118,16 @@ $(document).ready(function () {
                                     })
                                 }
                             },
-                            error: function (errMsg) {
-                                console.log(errMsg);
+                            error: function () {
+                                Swal.fire(
+                                  "Oops...",
+                                  "Something wrong, server is not responding!",
+                                  "warning"
+                                ).then((result) => {
+                                  if (result.isConfirmed) {
+                                    location.reload();
+                                  }
+                                });
                             }
                         })
                     }
@@ -180,8 +188,16 @@ $(document).ready(function () {
                                     console.log(`%cAzagaCreativeAPIService:`, 'color:#FF0000;', data);
                                 }
                             },
-                            error: function (errMsg) {
-                                console.log(errMsg);
+                            error: function () {
+                                Swal.fire(
+                                  "Oops...",
+                                  "Something wrong, server is not responding!",
+                                  "warning"
+                                ).then((result) => {
+                                  if (result.isConfirmed) {
+                                    location.reload();
+                                  }
+                                });
                             }
                         })
                     }
