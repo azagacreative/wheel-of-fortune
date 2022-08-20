@@ -124,7 +124,9 @@ class play extends Phaser.Scene {
                                 data: JSON.stringify({ uid: localStorage.getItem('ACTGames_uid'), score: scoreEncrypt }),
                                 headers: { "Content-Type": "application/json" },
                                 dataType: "json",
-                                success: function (data) { console.log(`%cAzagaCreativeAPIService:`,'color:#00FF00;', data); },
+                                success: function (data) { 
+                                    console.log(`%cAzagaCreativeAPIService:`,'color:#00FF00;', data); 
+                                },
                                 error: function (errMsg) {
                                     console.log(errMsg);
                                 }
@@ -147,7 +149,9 @@ class play extends Phaser.Scene {
                                 data: JSON.stringify({ uid: localStorage.getItem('ACTGames_uid'), score: scoreEncrypt }),
                                 headers: { "Content-Type": "application/json" },
                                 dataType: "json",
-                                success: function (data) { console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data); },
+                                success: function (data) { 
+                                    console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data); 
+                                },
                                 error: function (errMsg) {
                                     console.log(errMsg);
                                 }
@@ -170,7 +174,9 @@ class play extends Phaser.Scene {
                                 data: JSON.stringify({ uid: localStorage.getItem('ACTGames_uid'), score: scoreEncrypt }),
                                 headers: { "Content-Type": "application/json" },
                                 dataType: "json",
-                                success: function (data) { console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data); },
+                                success: function (data) { 
+                                    console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data); 
+                                },
                                 error: function (errMsg) {
                                     console.log(errMsg);
                                 }

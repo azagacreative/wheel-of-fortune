@@ -1,10 +1,10 @@
-let _GAME_DEVELOPEMENT_MODE = false;
+let _GAME_DEVELOPEMENT_MODE = true;
 let _API_URL;
 
 if (_GAME_DEVELOPEMENT_MODE === true) {
     _API_URL = 'http://localhost:3000';
 } else {
-    _API_URL = 'https://azagacreative.hnetip.xyz';
+    _API_URL = 'https://app.azagatechnology.com';
 }
 
 function GetURLParameter(sParam) {
@@ -39,30 +39,35 @@ $(document).ready(function () {
         })
     })
 });
-if (localStorage.getItem('ACTGames_nickname') === null) {
-    $('#login-form').show();
-    $('#game-container').hide();
-    localStorage.setItem('ACTGames_nickname', 'Guest');
-} else if (localStorage.getItem('ACTGames_nickname') != 'Guest' && localStorage.getItem('ACTGames_pin_code') != null) {
-    $('#login-form').hide();
-    $('#game-container').show();
-    $.ajax({
-        type: "POST",
-        url: _API_URL + "/api/login",
-        data: JSON.stringify({ nickname: localStorage.getItem('ACTGames_nickname'), pin_code: localStorage.getItem('ACTGames_pin_code') }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data) {
-            console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data);
-        },
-        error: function (errMsg) {
-            console.log(errMsg);
-        }
-    });
-} else if (localStorage.getItem('ACTGames_nickname') === 'Guest') {
-    $('#login-form').show();
-    $('#game-container').hide();
-}
+if (
+  localStorage.getItem("ACTGames_nickname") === null ||
+  localStorage.getItem("ACTGames_nickname") === "Guest"
+) {
+  $("#login-form").show();
+  $("#game-container").hide();
+  localStorage.setItem("ACTGames_nickname", "Guest");
+} else {
+  $.ajax({
+    type: "POST",
+    url: _API_URL + "/api/login",
+    data: JSON.stringify({
+      nickname: localStorage.getItem("ACTGames_nickname"),
+      pin_code: localStorage.getItem("ACTGames_pin_code"),
+    }),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (data) {
+        $("#login-form").hide();
+        //console.log('Login hidden!')
+        $("#game-container").show();
+        //console.log('Game shown!')
+      console.log(`%cAzagaCreativeAPIService:`, "color:#00FF00;", data);
+    },
+    error: function (errMsg) {
+      console.log(errMsg);
+    },
+  });
+} 
 $(document).ready(function () {
     $('#btn-register').click(function () {
         let nickname = $("#act-game-nickname-register").val();
@@ -159,6 +164,8 @@ $(document).ready(function () {
                                     localStorage.setItem('ACTGames_pin_code', pin_code);
                                     localStorage.setItem('ACTGames_uid', data.uid);
                                     console.log(`%cAzagaCreativeAPIService:`, 'color:#00FF00;', data);
+                                    //$("#login-form").hide();
+                                    //$("#game-container").show();
                                     location.reload();
                                 } else {
                                     Swal.fire(

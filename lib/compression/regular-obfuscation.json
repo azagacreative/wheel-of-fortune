@@ -5,7 +5,7 @@
     "debugProtection": false,
     "debugProtectionInterval": false,
     "disableConsoleOutput": false,
-    "identifierNamesGenerator": "mangled-shuffled",
+    "identifierNamesGenerator": "hexadecimal",
     "log": false,
     "numbersToExpressions": false,
     "renameGlobals": false,
